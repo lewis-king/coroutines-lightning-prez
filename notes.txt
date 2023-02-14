@@ -1,0 +1,50 @@
+Brief:
+
+What is Kotlin? stackoverflow (kotlin vs java vs scala)
+Reactive programming.. little's law?
+Why coroutines? ..
+
+Help you to write asynchronous code in a natural way, no bloat just pure business logic
+
+
+Additional framework learning, elegancy, Cognitive Load, Maintenance etc...
+
+Kotlin coroutines are designed to imitate sequential behaviour by default (unlike Aysnc/Await which is concurrent by default) Concurrency is hard, generally you want to do something and then something else with the result.
+
+
+Support for coroutines - Spring, Micronaut, Ktor, DB
+
+A lot of what Kotlin does is provide syntactic sugar/langugage feaures which ease/increase productivity for developers.
+i.e coroutines under the hood at compilation actually produce a function with a callback (Continuation)
+
+
+
+
+fun placeOrder(order: Order): Mono<Response> {
+    //..get response
+    return Mono.just(response)
+}
+or CompletableFuture, some way to say that no response is immediately available it will be available later
+
+suspend fun placeOrder(order: Order): Response {
+    //..get response
+    return response
+}
+
+5.2 Spring supports suspending functions natively. 
+Also have bridges/adaptors extensions to move from Reactive world to Suspending world
+
+Need a framework that support asynchrony i.e netty, webflux, vertx
+
+- Coroutines are executed by a Coroutine Builder either manually or from the framework you're using
+- On suspend installs a callback Stack of functions stored in couroutine stack then when it suspends is stored on the heap (thread then free to do anything else not blocked waiting for response). They'll be a pointer to the continuation to the callback in the heap that waits until whatever IO framework used calls it.
+Then it gets resumed from whatever place it left. 
+
+In sychronous framework if you want to support 10k connections you need 10k threads
+Beauty of asynchrous is that you could have 10k connections on a single thread or a few threads.
+In asynchronous you start working with the ideal number of threads to cores. And have extra IO threads for dealing with those things.
+
+
+Writing flows is like writing regular code with collections/sequences rather than library specific combinators
+
+The general promise of what Kotlin wants to achieve is that you should be able to write asynchronous code the same way you write the rest of your code - It should not look differently, it should not require lots of new knowledge
